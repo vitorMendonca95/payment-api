@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum DocumentType : string
+enum DocumentTypeEnum : string
 {
     case Cpf = 'cpf';
     case Cnpj = 'cnpj';

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
-use App\Enums\DocumentType;
+use App\Enums\DocumentTypeEnum;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -19,14 +19,14 @@ class UserCreateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $documentTypeEnum = array_column(DocumentType::cases(), 'value');
+        $documentTypeEnum = array_column(DocumentTypeEnum::cases(), 'value');
 
-        if ($this->request->get('document_type') === DocumentType::Cpf->value) {
-            $documentTypeValidation = DocumentType::Cpf->value;
+        if ($this->request->get('document_type') === DocumentTypeEnum::Cpf->value) {
+            $documentTypeValidation = DocumentTypeEnum::Cpf->value;
         }
 
-        if ($this->request->get('document_type') === DocumentType::Cnpj->value) {
-            $documentTypeValidation = DocumentType::Cnpj->value;
+        if ($this->request->get('document_type') === DocumentTypeEnum::Cnpj->value) {
+            $documentTypeValidation = DocumentTypeEnum::Cnpj->value;
         }
 
         $documentTypeValidation = $documentTypeValidation ?? '';
@@ -43,7 +43,7 @@ class UserCreateRequest extends FormRequest
                 'regex:/[a-z]/',
                 'regex:/[A-Z]/',
                 'regex:/[0-9]/',
-                'regex:/[@$!%*?&]/',
+                'regex:/[!@#$%^&*()-_=+<>?]/',
             ],
         ];
     }

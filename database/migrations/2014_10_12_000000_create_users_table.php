@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\DocumentType;
+use App\Enums\DocumentTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,10 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('document')->unique();
-            $table->enum('document_type', array_column(DocumentType::cases(), 'value'));
-            $table->timestamp('email_verified_at')->nullable();
+            $table->enum('document_type', [DocumentTypeEnum::Cpf->value, DocumentTypeEnum::Cnpj->value]);
             $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
         });
     }

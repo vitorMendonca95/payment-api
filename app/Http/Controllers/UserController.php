@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Resources\UserResource;
 use App\Services\User\UserService;
 

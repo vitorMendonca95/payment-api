@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum AccountType : string
+enum AccountTypeEnum : string
 {
     case Common = 'common';
     case Merchant = 'merchant';
