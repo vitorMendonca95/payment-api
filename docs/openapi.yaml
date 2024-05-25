@@ -1,0 +1,258 @@
+openapi: 3.0.0
+info:
+  title: Documentação da API de Pagamento
+  description: Descrição da API de Pagamento
+  version: 1.0.0
+
+paths:
+  /api/user/create:
+    post:
+      summary: Cria um novo usuário
+      description: Cria um novo usuário com os dados fornecidos no corpo da solicitação.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Cierra Bergstrom"
+                email:
+                  type: string
+                  format: email
+                  example: "zzzzz@hotmail.com"
+                document:
+                  type: string
+                  example: "04647126021"
+                document_type:
+                  type: string
+                  example: "cpf"
+                password:
+                  type: string
+                  example: "ljn%xw7MA"
+              required:
+                - name
+                - email
+                - document
+                - document_type
+                - password
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "Cierra Bergstrom"
+                      email:
+                        type: string
+                        format: email
+                        example: "zzzzz@hotmail.com"
+                      document:
+                        type: string
+                        example: "04647126021"
+                      document_type:
+                        type: string
+                        example: "cpf"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2024-05-25T21:40:50.000Z"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2024-05-25T21:40:50.000Z"
+                      id:
+                        type: integer
+                        example: 1
+        '400':
+          description: Requisição inválida. Verifique os dados enviados.
+        '500':
+          description: Erro interno do servidor. Tente novamente mais tarde.
+
+  /api/account/create:
+    post:
+      summary: Cria uma nova conta
+      description: Cria uma nova conta para o usuário especificado com os dados fornecidos no corpo da solicitação.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                account_type:
+                  type: string
+                  example: "common"
+                balance:
+                  type: number
+                  format: float
+                  example: 8442.93
+              required:
+                - user_id
+                - account_type
+                - balance
+      responses:
+        '201':
+          description: Conta criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  account_type:
+                    type: string
+                    example: "common"
+                  balance:
+                    type: number
+                    format: float
+                    example: 8442.93
+        '400':
+          description: Requisição inválida. Verifique os dados enviados.
+        '500':
+          description: Erro interno do servidor. Tente novamente mais tarde.
+
+  /api/transfer:
+    post:
+      summary: Realiza uma transferência
+      description: Realiza uma transferência de fundos entre duas contas.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: number
+                  format: float
+                  example: 100.0
+                payer:
+                  type: integer
+                  example: 1
+                payee:
+                  type: integer
+                  example: 2
+              required:
+                - value
+                - payer
+                - payee
+      responses:
+        '200':
+          description: Transferência realizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 2
+                      status:
+                        type: string
+                        example: "Completed"
+                      payer_account_id:
+                        type: integer
+                        example: 1
+                      payee_account_id:
+                        type: integer
+                        example: 2
+                      amount:
+                        type: number
+                        format: float
+                        example: 100
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2024-05-25T21:43:35.000Z"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2024-05-25T21:43:35.000Z"
+                      payeeAccount:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          user_id:
+                            type: integer
+                            example: 2
+                          account_type:
+                            type: string
+                            example: "common"
+                          balance:
+                            type: number
+                            format: float
+                            example: 8542.93
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: "2024-05-25T21:43:21.000Z"
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: "2024-05-25T21:43:35.000Z"
+                      payerAccount:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          user_id:
+                            type: integer
+                            example: 1
+                          account_type:
+                            type: string
+                            example: "common"
+                          balance:
+                            type: number
+                            format: float
+                            example: 8342.93
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: "2024-05-25T21:41:39.000Z"
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: "2024-05-25T21:43:35.000Z"
+        '400':
+          description: Requisição inválida. Verifique os dados enviados.
+        '500':
+          description: Erro interno do servidor. Tente novamente mais tarde.
+
+  /api/health:
+    get:
+      summary: Verifica a saúde da API
+      description: Verifica se a API está funcionando corretamente.
+      responses:
+        '200':
+          description: API está funcionando corretamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+        '500':
+          description: Erro interno do servidor. Tente novamente mais
