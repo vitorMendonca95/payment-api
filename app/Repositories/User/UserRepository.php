@@ -19,4 +19,9 @@ class UserRepository
 
         return $this->user;
     }
+
+    public function getUserById(int $userId): ?User
+    {
+        return User::find($userId);
+    }
 }

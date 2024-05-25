@@ -5,13 +5,15 @@ namespace Tests\Feature\Users;
 use App\Enums\DocumentTypeEnum;
 use App\Helpers\CustomHelper;
 use App\Helpers\DocumentHelper;
+use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class UserCreateTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     const ROUTE = '/api/user/create';
 
@@ -27,8 +29,6 @@ class UserCreateTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->refreshDatabase();
     }
 
     public function testUserCreation(): void

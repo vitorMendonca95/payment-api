@@ -17,4 +17,15 @@ class AccountRepository
 
         return $this->account;
     }
+
+    public function updateBalance(Account $account, float $newBalance): void
+    {
+        $account->balance = $newBalance;
+        $account->save();
+    }
+
+    public function findByUserId(int $userId)
+    {
+        return Account::query()->where('user_id', $userId)->get()->first();
+    }
 }

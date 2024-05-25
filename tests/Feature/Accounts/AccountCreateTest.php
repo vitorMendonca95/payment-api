@@ -5,13 +5,14 @@ namespace Tests\Feature\Accounts;
 use App\Enums\AccountTypeEnum;
 use App\Models\User;
 use Faker\Generator;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class AccountCreateTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     const ROUTE = '/api/account/create';
 
@@ -31,14 +32,12 @@ class AccountCreateTest extends TestCase
     {
         parent::setUp();
 
-        $this->refreshDatabase();
-
         $this->user = User::factory()->create();
     }
 
     public function testUserCreation(): void
     {
-        $amount = fake()->randomFloat(2, 1000, 10000);
+        $balance = fake()->randomFloat(2, 1000, 10000);
         $accountType = fake()->randomElement([
             AccountTypeEnum::Common->value,
             AccountTypeEnum::Merchant->value,
@@ -49,29 +48,29 @@ class AccountCreateTest extends TestCase
             [
                 'user_id' => $this->user->id,
                 'account_type' => $accountType,
-                'amount' => $amount,
+                'balance' => $balance,
             ],
             self::DEFAULT_HEADER,
         );
 
-        $response->assertStatus(Response::HTTP_CREATED);
-        $response->assertStatus(201)
-        ->assertJsonStructure([
-            'data' => [
-                'user_id',
-                'account_type',
-                'amount',
-                'updated_at',
-                'created_at',
-                'id',
-            ],
-        ])
-        ->assertJson([
-            'data' => [
-                'user_id' => $this->user->id,
-                'account_type' => $accountType,
-                'amount' => $amount,
-            ],
-        ]);
+        $response
+            ->assertStatus(Response::HTTP_CREATED)
+            ->assertJsonStructure([
+                'data' => [
+                    'user_id',
+                    'account_type',
+                    'balance',
+                    'updated_at',
+                    'created_at',
+                    'id',
+                ],
+            ])
+            ->assertJson([
+                'data' => [
+                    'user_id' => $this->user->id,
+                    'account_type' => $accountType,
+                    'balance' => $balance,
+                ],
+            ]);
     }
 }

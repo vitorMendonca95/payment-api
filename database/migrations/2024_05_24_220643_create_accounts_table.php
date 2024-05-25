@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->enum('account_type', [AccountTypeEnum::Common->value, AccountTypeEnum::Merchant->value]);
-            $table->decimal('amount', 15);
+            $table->decimal('balance', 15);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
