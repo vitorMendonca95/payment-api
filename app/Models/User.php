@@ -2,30 +2,34 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 /**
  * @property integer $id
- * @property string name
- * @property string email
- * @property string document
- * @property string password
- * @property Carbon created_at
- * @property Carbon updated_at
+ * @property string $name
+ * @property string $email
+ * @property string $document
+ * @property string $document_type
+ * @property mixed $password
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Account $account
+ * @method static find(int $int)
  */
 
 class User extends Model
 {
     use HasFactory;
-    use Notifiable;
 
     /**
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'document',
@@ -46,4 +50,14 @@ class User extends Model
     protected $casts = [
         'password' => 'hashed',
     ];
+
+    public function account(): HasOne
+    {
+        return $this->hasOne(Account::class, 'user_id', 'id');
+    }
+
+    public function getAccount(): Account
+    {
+        return $this->account;
+    }
 }

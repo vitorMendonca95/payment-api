@@ -31,4 +31,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'authorization_company' => [
+        'base_url' => env('AUTHORIZATION_COMPANY_BASE_URL', 'https://util.devi.tools'),
+        'authorize_path' => env('AUTHORIZATION_COMPANY_AUTHORIZE_PATH', '/api/v2/authorize'),
+    ],
+
+    'notification_company' => [
+        'base_url' => env('NOTIFICATION_COMPANY_BASE_URL', 'https://util.devi.tools'),
+        'notify_path' => env('NOTIFICATION_COMPANY_AUTHORIZE_PATH', '/api/v1/notify'),
+    ],
+
 ];

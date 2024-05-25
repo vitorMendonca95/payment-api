@@ -20,7 +20,7 @@ class AccountCreateRequest extends FormRequest
         return [
             'user_id' => ['required', 'integer', 'exists:users,id'],
             'account_type' => ['required', Rule::in($accountTypeEnum)],
-            'amount' => ['required', 'numeric', 'min:0'],
+            'balance' => ['required', 'numeric', 'min:0'],
         ];
     }
 }
