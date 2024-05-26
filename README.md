@@ -19,3 +19,14 @@
 - Docker Composer 2.3.3
 
 <br>
+
+<br>
+
+## Instalacão
+
+```bash
+# docker compose up --build -d
+```
+
+<br>
+
