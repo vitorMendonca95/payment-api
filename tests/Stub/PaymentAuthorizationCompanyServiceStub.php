@@ -2,9 +2,9 @@
 
 namespace Tests\Stub;
 
-use App\Interfaces\AuthorizationCompanyServiceInterface;
+use App\Interfaces\PaymentAuthorizationCompanyServiceInterface;
 
-class AuthorizationCompanyServiceStub implements AuthorizationCompanyServiceInterface
+class PaymentAuthorizationCompanyServiceStub implements PaymentAuthorizationCompanyServiceInterface
 {
     public function authorize(array $params = [])
     {

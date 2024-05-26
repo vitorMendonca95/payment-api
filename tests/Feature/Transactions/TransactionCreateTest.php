@@ -2,20 +2,17 @@
 
 namespace Tests\Feature\Transactions;
 
+use App\Adapters\ExternalProvider\PaymentAuthorization\CompanyXAdapter;
 use App\Enums\AccountTypeEnum;
 use App\Enums\TransactionStatusEnum;
 use App\Exceptions\Transaction\AccountTransferNotAllowedException;
 use App\Exceptions\Transaction\InsufficientFundsException;
-use App\Interfaces\AuthorizationCompanyServiceInterface;
 use App\Models\Account;
 use App\Models\User;
-use App\Services\ExternalProvider\AuthorizationCompany\AuthorizationCompanyService;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery;
 use Symfony\Component\HttpFoundation\Response;
-use Tests\Stub\AuthorizationCompanyServiceStub;
+use Tests\Stub\PaymentAuthorizationCompanyServiceStub;
 use Tests\TestCase;
 
 class TransactionCreateTest extends TestCase
@@ -43,7 +40,7 @@ class TransactionCreateTest extends TestCase
         parent::setUp();
         $this->refreshApplication();
 
-        $this->app->bind(AuthorizationCompanyServiceInterface::class, AuthorizationCompanyServiceStub::class);
+        $this->app->bind(CompanyXAdapter::class, PaymentAuthorizationCompanyServiceStub::class);
 
         $this->userPayee = User::factory()->create();
         $this->userPayer = User::factory()->create();
@@ -51,7 +48,7 @@ class TransactionCreateTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->app->bind(AuthorizationCompanyServiceInterface::class, AuthorizationCompanyService::class);
+        $this->app->bind(CompanyXAdapter::class, CompanyXAdapter::class);
         parent::tearDown();
     }
 

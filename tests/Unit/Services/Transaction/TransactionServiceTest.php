@@ -2,17 +2,19 @@
 
 namespace Tests\Unit\Services\Transaction;
 
+use App\Adapters\ExternalProvider\PaymentAuthorization\CompanyXAdapter;
 use App\Enums\AccountTypeEnum;
 use App\Exceptions\Transaction\AccountTransferNotAllowedException;
 use App\Exceptions\Transaction\PayerOrPayeeNotFoundException;
 use App\Exceptions\Transaction\UnauthorizedTransactionException;
-use App\Factory\AccountTransferableServiceFactory;
+use App\Factories\AccountTransferableServiceFactory;
+use App\Factories\ExternalProvider\PaymentAuthorization\PaymentAuthorizationServiceFactory;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Repositories\Transaction\TransactionRepository;
 use App\Services\Account\AccountCommonService;
-use App\Services\ExternalProvider\AuthorizationCompany\AuthorizationCompanyService;
+use App\Services\ExternalProvider\PaymentAuthorization\CompanyXService;
 use App\Services\Transaction\TransactionNotificationService;
 use App\Services\Transaction\TransactionService;
 use App\Services\User\UserService;
@@ -26,9 +28,10 @@ class TransactionServiceTest extends TestCase
 {
     protected TransactionRepository $transactionRepository;
     protected UserService $userService;
-    protected AuthorizationCompanyService $authorizationCompanyService;
+    protected CompanyXService $authorizationCompanyService;
     protected AccountCommonService $accountCommonServiceMock;
     protected TransactionNotificationService $transactionNotificationServiceMock;
+    protected PaymentAuthorizationServiceFactory $paymentAuthorizationServiceFactoryMock;
 
     protected function setUp(): void
     {
@@ -37,7 +40,8 @@ class TransactionServiceTest extends TestCase
         $this->transactionRepository = Mockery::mock(TransactionRepository::class);
         $this->userService = Mockery::mock(UserService::class);
         $this->userMock = Mockery::mock(User::class);
-        $this->authorizationCompanyService = Mockery::mock(AuthorizationCompanyService::class);
+        $this->authorizationCompanyService = Mockery::mock(CompanyXService::class);
+        $this->paymentAuthorizationServiceFactoryMock = Mockery::mock(PaymentAuthorizationServiceFactory::class);
         $this->accountCommonServiceMock = Mockery::mock(AccountCommonService::class);
         $this->accountTransferableServiceFactoryMock = Mockery::mock(AccountTransferableServiceFactory::class);
         $this->transactionNotificationServiceMock = Mockery::mock(TransactionNotificationService::class);
@@ -81,13 +85,17 @@ class TransactionServiceTest extends TestCase
             ->shouldReceive('getAccountServiceInstance')
             ->andReturn($this->accountCommonServiceMock);
 
+        $this->paymentAuthorizationServiceFactoryMock
+            ->shouldReceive('getAuthorizationService')
+            ->andReturn(new CompanyXAdapter($this->authorizationCompanyService));
+
         $this->transactionNotificationServiceMock->shouldReceive('sendNotificationToPayee')->andReturnNull();
 
         $service = new TransactionService(
             $this->transactionRepository,
             $this->userService,
-            $this->authorizationCompanyService,
             $this->accountTransferableServiceFactoryMock,
+            $this->paymentAuthorizationServiceFactoryMock,
             $this->transactionNotificationServiceMock,
         );
 
@@ -125,8 +133,8 @@ class TransactionServiceTest extends TestCase
         $service = new TransactionService(
             $this->transactionRepository,
             $this->userService,
-            $this->authorizationCompanyService,
             $this->accountTransferableServiceFactoryMock,
+            $this->paymentAuthorizationServiceFactoryMock,
             $this->transactionNotificationServiceMock,
         );
 
@@ -164,8 +172,8 @@ class TransactionServiceTest extends TestCase
         $service = new TransactionService(
             $this->transactionRepository,
             $this->userService,
-            $this->authorizationCompanyService,
             $this->accountTransferableServiceFactoryMock,
+            $this->paymentAuthorizationServiceFactoryMock,
             $this->transactionNotificationServiceMock,
         );
 
@@ -190,8 +198,8 @@ class TransactionServiceTest extends TestCase
         $service = new TransactionService(
             $this->transactionRepository,
             $this->userService,
-            $this->authorizationCompanyService,
             $this->accountTransferableServiceFactoryMock,
+            $this->paymentAuthorizationServiceFactoryMock,
             $this->transactionNotificationServiceMock,
         );
 
