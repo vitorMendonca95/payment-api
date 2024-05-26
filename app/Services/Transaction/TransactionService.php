@@ -7,13 +7,12 @@ use App\Enums\TransactionStatusEnum;
 use App\Exceptions\Transaction\AccountTransferNotAllowedException;
 use App\Exceptions\Transaction\PayerOrPayeeNotFoundException;
 use App\Exceptions\Transaction\UnauthorizedTransactionException;
-use App\Factory\AccountTransferableServiceFactory;
-use App\Interfaces\AuthorizationCompanyServiceInterface;
+use App\Factories\AccountTransferableServiceFactory;
+use App\Factories\ExternalProvider\PaymentAuthorization\PaymentAuthorizationServiceFactory;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Repositories\Transaction\TransactionRepository;
-use App\Services\ExternalProvider\AuthorizationCompany\AuthorizationCompanyService;
 use App\Services\User\UserService;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -24,8 +23,8 @@ class TransactionService
     public function __construct(
         protected TransactionRepository $transactionRepository,
         protected UserService $userService,
-        protected AuthorizationCompanyServiceInterface $authorizationCompanyService,
         protected AccountTransferableServiceFactory $accountTransferableServiceFactory,
+        protected PaymentAuthorizationServiceFactory $paymentAuthorizationServiceFactory,
         protected TransactionNotificationService $transactionNotificationService,
     ) {
     }
@@ -98,7 +97,8 @@ class TransactionService
     private function checkAuthorizationService(Account $account): void
     {
         try {
-            $this->authorizationCompanyService->authorize($account->toArray());
+            $authorizationCompanyAdapter = $this->paymentAuthorizationServiceFactory->getAuthorizationService();
+            $authorizationCompanyAdapter->authorize($account->toArray());
         } catch (Throwable $e) {
             throw new UnauthorizedTransactionException();
         }

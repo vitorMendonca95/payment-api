@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Factory;
+namespace App\Factories;
 
 use App\Enums\AccountTypeEnum;
 use App\Exceptions\Account\AccountTypeNotFoundException;
@@ -13,7 +13,7 @@ class AccountTransferableServiceFactory
     /**
      * @throws Exception
      */
-    public function getAccountServiceInstance($type): AccountTransferableServiceInterface
+    public function getAccountServiceInstance(string $type): AccountTransferableServiceInterface
     {
         return match ($type) {
             AccountTypeEnum::Common->value => app(AccountCommonService::class),

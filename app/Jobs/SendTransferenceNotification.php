@@ -39,10 +39,8 @@ class SendTransferenceNotification implements ShouldQueue
      * @throws GuzzleException
      * @throws Throwable
      */
-    public function handle(): void
+    public function handle(Client $client): void
     {
-        $client = new Client();
-
         $url = config('services.notification_company.base_url') . config('services.notification_company.notify_path');
 
         try {

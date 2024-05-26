@@ -24,7 +24,7 @@ class AccountRepository
         $account->save();
     }
 
-    public function findByUserId(int $userId)
+    public function findByUserId(int $userId): ?Account
     {
         return Account::query()->where('user_id', $userId)->get()->first();
     }

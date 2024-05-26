@@ -31,9 +31,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'authorization_company' => [
-        'base_url' => env('AUTHORIZATION_COMPANY_BASE_URL', 'https://util.devi.tools'),
-        'authorize_path' => env('AUTHORIZATION_COMPANY_AUTHORIZE_PATH', '/api/v2/authorize'),
+    'current_payment_authorization_company' => env('CURRENT_PAYMENT_AUTHORIZATION_COMPANY', 'companyX'),
+
+    'payment_authorization_companies' => [
+        'company_x' => [
+            'base_url' => env('COMPANY_X_BASE_URL', 'https://util.devi.tools'),
+            'authorize_path' => env('COMPANY_X_AUTHORIZE_PATH', '/api/v2/authorize'),
+        ],
     ],
 
     'notification_company' => [

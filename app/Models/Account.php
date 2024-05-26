@@ -32,9 +32,4 @@ class Account extends Model
     protected $casts = [
         'balance' => 'float',
     ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
 }
