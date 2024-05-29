@@ -99,7 +99,7 @@ class TransactionService
         try {
             $authorizationCompanyAdapter = $this->paymentAuthorizationServiceFactory->getAuthorizationService();
             $authorizationCompanyAdapter->authorize($account->toArray());
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             throw new UnauthorizedTransactionException();
         }
     }
